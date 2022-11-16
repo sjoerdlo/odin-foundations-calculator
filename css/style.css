@@ -1,0 +1,25 @@
+.calcContainer {
+    background-color: #2a2d2f;
+    height: 645px;
+    width: 470px;
+}
+
+.calcOutput {
+    align-items: flex-end;
+    color: #fff;
+    display: flex;
+    font-size: 80px;
+    justify-content: flex-end;
+    height: 96px;
+    padding: 23px 33px;
+}
+
+.calcButtons {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.calcButtons > button {
+    height: 92px;
+    width: 25%;
+}
