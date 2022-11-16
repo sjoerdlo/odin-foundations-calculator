@@ -21,6 +21,7 @@ function initButtons() {
 	let activeOperator;
 	let numberA;
 	let numberB;
+	let currentNumber = 0;
 	
 	buttons.forEach(button => {
 		button.addEventListener('click', (e) => {
@@ -36,14 +37,14 @@ function initButtons() {
 			switch (buttonType) {
 				case 'number':
 					// Number buttons
-					let number = parseInt(e.target.textContent);
+					currentNumber = parseInt(e.target.textContent);
 					// Update output screen
-					calcOutput.textContent = number;
+					calcOutput.textContent = currentNumber;
 					// Store number
 					if (numberA === undefined) {
-						numberA = number;
+						numberA = currentNumber;
 					} else {
-						numberB = number;
+						numberB = currentNumber;
 					}
 					break;
 
@@ -62,12 +63,20 @@ function initButtons() {
 
 				case 'sign':
 					// Sign button
-					// Toggle the sign on button click
+					// Toggle the sign on button click on output screen
 					if (Array.from(calcOutput.textContent)[0] === '-') {
 						calcOutput.textContent = calcOutput.textContent.substring(1);
 					} else {
 						calcOutput.textContent = `-${calcOutput.textContent}`;
 					}
+					// Toggle sign on current stored number
+					currentNumber = currentNumber * -1;
+					if (numberB === undefined) {
+						numberA = currentNumber;
+					} else {
+						numberB = currentNumber;
+					}
+
 					break;
 
 				case 'percentage':
@@ -81,6 +90,7 @@ function initButtons() {
 					isActiveOperator = false;
 					numberA = undefined;
 					numberB = undefined;
+					currentNumber = 0;
 					break;
 			
 				default:
@@ -93,7 +103,7 @@ function initButtons() {
 				if (isActiveOperator && numberA !== undefined && numberB !== undefined) {
 					numberA = operate(activeOperator, numberA, numberB);
 					numberB = undefined;
-					calcOutput.textContent = numberA;
+					calcOutput.textContent = currentNumber = numberA;
 				}
 				// Reset stored active operator when equals button initiated the calculation
 				if (e.target.classList.contains('calcButtons--equals')) {
