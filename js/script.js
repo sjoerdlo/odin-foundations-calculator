@@ -1,5 +1,5 @@
 function operate(operator, a, b) {
-	// Store the operators
+	// Store the operators and their operations
 	const operators = {
 		'sum': (a, b) => a + b,
 		'subtract': (a, b) => a - b,
@@ -29,38 +29,66 @@ function initButtons() {
 				button.classList.remove('calcButtons--active');
 			});
 
-			let buttonData = e.target.dataset.button;
-			let number = parseInt(buttonData);
-			if (typeof number === 'number' && ! Number.isNaN(number)) {
-				// Number buttons
-				// Update output screen
+			// Store which type of button we're dealing with
+			let buttonType = e.target.dataset.button;
+			
+			// Make the buttons work
+			switch (buttonType) {
+				case 'number':
+					// Number buttons
+					let number = parseInt(e.target.textContent);
+					// Update output screen
 					calcOutput.textContent = number;
-				// Store number
-				if (numberA === undefined) {
-					numberA = number;
-				} else {
-					numberB = number;
-				}
-			} else if (e.target.classList.contains('calcButtons--operator')) {
-				// Operator buttons
-				// Add active state to clicked operator button
-				e.target.classList.add('calcButtons--active');
-				isActiveOperator = true;
-				activeOperator = buttonData;
-			} else if (buttonData === 'decimal') {
-				// Decimal button
-				calcOutput.textContent += ',' ;
-			} else if (buttonData === 'reset') {
-				// Reset button
-				calcOutput.textContent = '0' ;
-				activeOperator = undefined;
-				isActiveOperator = false;
-				numberA = undefined;
-				numberB = undefined;
+					// Store number
+					if (numberA === undefined) {
+						numberA = number;
+					} else {
+						numberB = number;
+					}
+					break;
+
+				case 'operator':
+					// Operator buttons
+					// Add active state to clicked operator button
+					e.target.classList.add('calcButtons--active');
+					isActiveOperator = true;
+					activeOperator = e.target.dataset.buttonOperator;
+					break;
+					
+				case 'decimal':
+					// Decimal button
+					calcOutput.textContent += ',' ;
+					break;
+
+				case 'sign':
+					// Sign button
+					// Toggle the sign on button click
+					if (Array.from(calcOutput.textContent)[0] === '-') {
+						calcOutput.textContent = calcOutput.textContent.substring(1);
+					} else {
+						calcOutput.textContent = `-${calcOutput.textContent}`;
+					}
+					break;
+
+				case 'percentage':
+		
+					break;
+
+				case 'reset':
+					// Reset button
+					calcOutput.textContent = '0' ;
+					activeOperator = undefined;
+					isActiveOperator = false;
+					numberA = undefined;
+					numberB = undefined;
+					break;
+			
+				default:
+					break;
 			}
 			
 			// Calculate only on operator or equals button press
-			if (e.target.classList.contains('calcButtons--operator') || buttonData === 'equals') {
+			if (e.target.classList.contains('calcButtons--operator') || buttonType === 'equals') {
 				// Is all the data available to start a calculation?
 				if (isActiveOperator && numberA !== undefined && numberB !== undefined) {
 					numberA = operate(activeOperator, numberA, numberB);
